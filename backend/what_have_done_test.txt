@@ -1,0 +1,8 @@
+Methods             tested          frontend      timeTaken(backendTesting)
+
+create_user         done
+sumbit_question     done 
+create_scheduler    done
+get_schedules       done
+voice_assist        done
+classroom           done
