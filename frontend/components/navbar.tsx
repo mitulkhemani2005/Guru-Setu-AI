@@ -33,9 +33,9 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-all duration-300 group-hover:shadow-lg group-hover:animate-glow">
-              <span className="text-primary-foreground font-bold">GS</span>
+          <Link href="/dashboard" className="flex items-center space-x-3 group">
+            <div className="w-10 h-10 rounded-lg overflow-hidden transform group-hover:scale-105 transition-all duration-300 group-hover:shadow-lg">
+              <img src="/logo.jpg" alt="Guru Setu logo" className="w-full h-full object-cover" />
             </div>
             <span className="font-bold text-foreground hidden sm:inline">Guru Setu</span>
           </Link>

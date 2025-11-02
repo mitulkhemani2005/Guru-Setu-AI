@@ -22,9 +22,9 @@ export default function DashboardNavbar() {
       <nav className="fixed top-0 left-0 right-0 h-20 bg-background border-b border-border flex items-center px-4 md:px-8 z-40">
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center space-x-2 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/60 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform">
-              <span className="text-primary-foreground font-bold text-lg">GS</span>
+          <Link href="/dashboard" className="flex items-center space-x-3 group">
+            <div className="w-10 h-10 rounded-lg overflow-hidden transform group-hover:scale-105 transition-all duration-300 group-hover:shadow-lg">
+              <img src="/logo.jpg" alt="Guru Setu logo" className="w-full h-full object-cover" />
             </div>
             <span className="font-bold text-foreground hidden sm:inline">Guru Setu</span>
           </Link>
