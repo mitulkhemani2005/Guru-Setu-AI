@@ -118,13 +118,12 @@ export default function QuestionGeneratorPage() {
       <div className="pt-20 px-4 md:px-8 pb-8">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Header */}
-          <div className="text-center space-y-4">
+          <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
               Question Paper Generator
             </h1>
-            <p className="text-foreground/60 max-w-2xl mx-auto">
-              Create customized question papers instantly by uploading your study material and defining
-              question parameters.
+            <p className="text-foreground/60 max-w-2xl">
+              Create customized question papers instantly by uploading your study material and defining question parameters.
             </p>
           </div>
 

@@ -15,7 +15,7 @@ UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Whisper STT Model
-whisper_model = whisper.load_model("medium")
+whisper_model = whisper.load_model("small")
 
 # Gemini Config (Replace with env variable in prod)
 genai.configure(api_key=gemini_api_key)
@@ -25,7 +25,7 @@ system_prompt = (
     "Respond politely, briefly, and helpfully. Use prior conversation turns for context. "
     "Prefer concise, actionable answers. If unclear, ask a short clarifying question. "
     "You need to respond in same language in the language you get input"
-    "Avoid heavy punctuation or emojis."    
+    "dont give *, heavy punctuation, emoji, any symbols."    
 )
 
 model = genai.GenerativeModel(

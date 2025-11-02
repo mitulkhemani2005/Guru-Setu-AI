@@ -56,20 +56,25 @@ export default function HeroSection({ onGetStarted }: { onGetStarted: () => void
       return
     }
 
-    if (authModal === "register") {
-      localStorage.setItem("username", username)
-      localStorage.setItem("userEmail", email)
-    } else {
-      localStorage.setItem("username", username)
-    }
+      // Only access localStorage on the client side
+      if (typeof window !== 'undefined') {
+        if (authModal === "register") {
+          localStorage.setItem("username", username)
+          localStorage.setItem("userEmail", email)
+        } else {
+          localStorage.setItem("username", username)
+        }
+      }
 
-    // play closing animation (soft) then navigate
-    setIsClosing(true)
-    setTimeout(() => {
-      setIsClosing(false)
-      setAuthModal(null)
-      window.location.href = "/dashboard"
-    }, 1000)
+      // play closing animation (soft) then navigate
+      setIsClosing(true)
+      setTimeout(() => {
+        setIsClosing(false)
+        setAuthModal(null)
+        if (typeof window !== 'undefined') {
+          window.location.href = "/dashboard"
+        }
+      }, 1000)
   }
 
   return (
@@ -104,7 +109,7 @@ export default function HeroSection({ onGetStarted }: { onGetStarted: () => void
             <span className="block text-foreground">with AI Intelligence</span>
           </h1>
           <p className="text-lg sm:text-xl text-foreground/60 max-w-2xl mx-auto">
-            Guru Setu helps create lessons & feedback powered by AI.
+            Guru Setu your AI partner for smarter lessons and impactful feedback.
           </p>
         </div>
 
@@ -118,16 +123,13 @@ export default function HeroSection({ onGetStarted }: { onGetStarted: () => void
         </div>
 
         {/* CTA */}
-        <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="pt-4 flex justify-center items-center">
           <Button
             onClick={() => setAuthModal("register")}
             size="lg"
             className="h-12 px-8 text-lg font-semibold rounded-full shadow-lg bg-gradient-to-r from-primary to-secondary"
           >
             Get Started Free →
-          </Button>
-          <Button variant="outline" size="lg" className="h-12 px-8 text-lg rounded-full border-2 border-primary/40">
-            Watch Demo
           </Button>
         </div>
       </div>

@@ -1,13 +1,22 @@
 "use client"
-import { useMemo } from "react"
+import { useMemo, useState, useEffect } from "react"
 import { BookMarked, BarChart3, Clock, Mic } from "lucide-react"
 import DashboardNavbar from "@/components/dashboard/dashboard-navbar"
 import DynamicBubbles from "@/components/dynamic-bubbles"
 import Link from "next/link"
 
-const teacher = localStorage.getItem("username") || "Teacher"
+// Avoid reading localStorage at module evaluation time (causes errors during SSR/build)
+// Read it inside the client component instead.
 
 export default function Dashboard() {
+  const [teacher, setTeacher] = useState<string>("Teacher")
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const name = localStorage.getItem("username")
+      if (name) setTeacher(name)
+    }
+  }, [])
   const features = useMemo(
     () => [
       {

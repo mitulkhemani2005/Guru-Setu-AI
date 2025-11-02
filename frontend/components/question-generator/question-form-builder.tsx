@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 export type Question = {
   difficulty: "easy" | "medium" | "hard"
   marks: string
-  type: "short" | "long" | "mcq"
+  type: "short" | "long" | "mcq" | "fill in the blanks"
   question_text: string
 }
 
@@ -25,7 +25,7 @@ export default function QuestionFormBuilder({
   onQuestionChange,
 }: QuestionFormBuilderProps) {
   const difficulties = ["easy", "medium", "hard"]
-  const types = ["short", "long", "mcq"]
+  const types = ["short", "long", "mcq", "fill in the blanks"]
   const maxWordsPerMark = 20 // Backend uses ~20 words per mark
 
   return (
@@ -97,7 +97,7 @@ export default function QuestionFormBuilder({
             {/* Question Prompt */}
             <div>
               <label className="block text-sm font-medium text-foreground/70 mb-2">
-                Question Prompt / Instructions (Expected length: ~{Number(question.marks) * maxWordsPerMark} words)
+                Question Prompt / Instructions
               </label>
               <textarea
                 value={question.question_text}
@@ -106,7 +106,7 @@ export default function QuestionFormBuilder({
                 rows={4}
                 className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground placeholder:text-foreground/50 focus:outline-none focus:border-primary transition-colors resize-none"
               />
-              <p className="text-xs text-muted-foreground mt-1">Aim ~{maxWordsPerMark} words per mark in the generated output.</p>
+              {/* <p className="text-xs text-muted-foreground mt-1">Aim ~{maxWordsPerMark} words per mark in the generated output.</p> */}
             </div>
           </div>
         ))}
