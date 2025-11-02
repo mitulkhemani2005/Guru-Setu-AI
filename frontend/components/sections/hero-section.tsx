@@ -58,7 +58,7 @@ export default function HeroSection({ onGetStarted }: { onGetStarted: () => void
 
     if (authModal === "register") {
       localStorage.setItem("username", username)
-      localStorage.setItem("email", email)
+      localStorage.setItem("userEmail", email)
     } else {
       localStorage.setItem("username", username)
     }

@@ -5,6 +5,8 @@ import DashboardNavbar from "@/components/dashboard/dashboard-navbar"
 import DynamicBubbles from "@/components/dynamic-bubbles"
 import Link from "next/link"
 
+const teacher = localStorage.getItem("username") || "Teacher"
+
 export default function Dashboard() {
   const features = useMemo(
     () => [
@@ -65,7 +67,7 @@ export default function Dashboard() {
           {/* Welcome Section */}
           <div className="space-y-4 animate-in">
             <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              Welcome back, Teacher!
+              Welcome back, {teacher}
             </h1>
             <p className="text-lg text-foreground/70">Choose a feature to get started</p>
           </div>
