@@ -1,10 +1,16 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 
 export default function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
+  const [authModal, setAuthModal] = useState<"login" | "register" | null>(null)
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const ref = useRef<HTMLDivElement>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [isClosing, setIsClosing] = useState(false)
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -34,8 +40,43 @@ export default function HeroSection({ onGetStarted }: { onGetStarted: () => void
     return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [])
 
+  // reset closing flag when modal opens
+  useEffect(() => {
+    if (authModal) setIsClosing(false)
+  }, [authModal])
+
+  const handleSubmit = () => {
+    // validate before submit
+    const isFormValid = authModal === "register"
+      ? username.trim() !== "" && email.trim() !== "" && password.trim() !== ""
+      : username.trim() !== "" && password.trim() !== ""
+
+    if (!isFormValid) {
+      setError("Please fill all fields")
+      return
+    }
+
+    if (authModal === "register") {
+      localStorage.setItem("username", username)
+      localStorage.setItem("email", email)
+    } else {
+      localStorage.setItem("username", username)
+    }
+
+    // play closing animation (soft) then navigate
+    setIsClosing(true)
+    setTimeout(() => {
+      setIsClosing(false)
+      setAuthModal(null)
+      window.location.href = "/dashboard"
+    }, 1000)
+  }
+
   return (
     <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 px-4">
+      {/* wrap page content so we can blur it without affecting the modal */}
+      <div className={`w-full transition-all duration-700 ${authModal !== null || isClosing ? 'blur-sm' : ''}`}>
+      {/* Background elements preserved */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full blur-3xl animate-pulse" />
         <div
@@ -48,30 +89,26 @@ export default function HeroSection({ onGetStarted }: { onGetStarted: () => void
         />
       </div>
 
-      {/* Content */}
       <div className="max-w-4xl mx-auto text-center space-y-8 animate-scale-in">
-        {/* Tag */}
-        <div className="inline-block px-4 py-1.5 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full border border-primary/30 backdrop-blur-sm hover:border-primary/60 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+        <div className="inline-block px-4 py-1.5 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full border border-primary/30 backdrop-blur-sm">
           <span className="text-sm font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             ✨ Welcome to the Future of Teaching
           </span>
         </div>
 
-        {/* Main Heading */}
         <div className="space-y-4">
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight text-balance">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
             <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent animate-gradient">
               Empower Your Teaching
             </span>
             <span className="block text-foreground">with AI Intelligence</span>
           </h1>
-          <p className="text-lg sm:text-xl text-foreground/60 max-w-2xl mx-auto text-balance leading-relaxed">
-            Guru Setu is your intelligent companion for creating engaging lessons, personalized student feedback, and
-            data-driven insights—all powered by cutting-edge AI.
+          <p className="text-lg sm:text-xl text-foreground/60 max-w-2xl mx-auto">
+            Guru Setu helps create lessons & feedback powered by AI.
           </p>
         </div>
 
-        {/* Floating Elements */}
+        {/* Floating elements preserved */}
         <div className="relative h-32 pointer-events-none">
           <div className="floating-element absolute left-1/4 top-0 w-16 h-16 bg-gradient-to-br from-primary/30 to-primary/10 rounded-lg blur-xl animate-float" />
           <div
@@ -80,46 +117,95 @@ export default function HeroSection({ onGetStarted }: { onGetStarted: () => void
           />
         </div>
 
-        {/* CTA Buttons */}
+        {/* CTA */}
         <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Button
-            onClick={onGetStarted}
+            onClick={() => setAuthModal("register")}
             size="lg"
-            className="h-12 px-8 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 animate-glow"
+            className="h-12 px-8 text-lg font-semibold rounded-full shadow-lg bg-gradient-to-r from-primary to-secondary"
           >
             Get Started Free →
           </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="h-12 px-8 text-lg font-semibold rounded-full border-2 border-primary/40 hover:border-primary hover:bg-primary/5 transition-all duration-300 hover:scale-105 bg-transparent"
-          >
+          <Button variant="outline" size="lg" className="h-12 px-8 text-lg rounded-full border-2 border-primary/40">
             Watch Demo
           </Button>
         </div>
-
-        {/* Stats Section
-        <div className="pt-12 grid grid-cols-3 gap-4 sm:gap-8 max-w-2xl mx-auto">
-          <div className="p-4 sm:p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all duration-300 hover:scale-105 group">
-            <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              1000
-            </p>
-            <p className="text-xs sm:text-sm text-foreground/60 mt-2">Teachers</p>
-          </div>
-          <div className="p-4 sm:p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-secondary/50 transition-all duration-300 hover:scale-105 group">
-            <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-              20K+
-            </p>
-            <p className="text-xs sm:text-sm text-foreground/60 mt-2">Students</p>
-          </div>
-          <div className="p-4 sm:p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all duration-300 hover:scale-105 group">
-            <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              100%
-            </p>
-            <p className="text-xs sm:text-sm text-foreground/60 mt-2">Satisfaction</p>
-          </div>
-        </div> */}
       </div>
+
+  </div>
+
+  {(authModal !== null || isClosing) && (
+        <div
+          className={`fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-[1000ms] ${authModal && !isClosing ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          onClick={(e) => {
+            // close modal when clicking on the overlay (outside the dialog)
+            if (e.target === e.currentTarget) {
+              setIsClosing(true)
+              setTimeout(() => {
+                setIsClosing(false)
+                setAuthModal(null)
+              }, 1000)
+            }
+          }}
+        >
+          <div className={`bg-white dark:bg-gray-900 p-6 rounded-xl w-full max-w-sm space-y-4 transform transition-all duration-[1000ms] ${authModal && !isClosing ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-2'}`}>
+                <h2 className="text-xl font-bold text-center">
+                  {authModal === "register" ? "Create Account" : "Login"}
+                </h2>
+                {/* wrap inputs in a form so Enter submits */}
+                <form
+                  className="space-y-2"
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    handleSubmit()
+                  }}
+                >
+                  <input
+                    className="w-full p-2 rounded border"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => { setUsername(e.target.value); setError(null) }}
+                  />
+                  {authModal === "register" && (
+                    <input
+                      className="w-full p-2 rounded border"
+                      placeholder="Email"
+                      value={email}
+                      onChange={(e) => { setEmail(e.target.value); setError(null) }}
+                    />
+                  )}
+                  <input
+                    className="w-full p-2 rounded border"
+                    placeholder="Password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => { setPassword(e.target.value); setError(null) }}
+                  />
+                  {error && <p className="text-sm text-red-500">{error}</p>}
+
+                  {/* disable until all visible fields are filled */}
+                  {(() => {
+                    const isFormValid = authModal === "register"
+                      ? username.trim() !== "" && email.trim() !== "" && password.trim() !== ""
+                      : username.trim() !== "" && password.trim() !== ""
+                    return (
+                      <Button
+                        type="submit"
+                        className={`w-full ${!isFormValid ? "opacity-50 pointer-events-none" : ""}`}
+                        disabled={!isFormValid}
+                      >
+                        Continue
+                      </Button>
+                    )
+                  })()}
+                </form>
+
+                <button className="text-sm text-center w-full" onClick={() => setAuthModal(authModal === "register" ? "login" : "register")}>
+                  {authModal === "register" ? "Already have an account? Login" : "New here? Register"}
+                </button>
+              </div>
+        </div>
+      )}
     </section>
   )
 }
